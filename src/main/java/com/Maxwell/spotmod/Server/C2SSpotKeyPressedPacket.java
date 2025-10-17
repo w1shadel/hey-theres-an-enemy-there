@@ -1,7 +1,7 @@
 package com.Maxwell.spotmod.Server;
 
 
-import com.Maxwell.spotmod.Misc.Config.Config;
+import com.Maxwell.spotmod.Misc.Config.ModConfig;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,8 +35,8 @@ public class C2SSpotKeyPressedPacket {
                 return;
             }
 
-            double maxRange = Config.Server.SPOT_RANGE.get();
-            double fovAngle = Config.Server.SPOT_FOV_ANGLE.get();
+            double maxRange = ModConfig.Server.SPOT_RANGE.get();
+            double fovAngle = ModConfig.Server.SPOT_FOV_ANGLE.get();
             Vec3 playerEyePos = player.getEyePosition();
 
             AABB searchBox = player.getBoundingBox().inflate(maxRange);

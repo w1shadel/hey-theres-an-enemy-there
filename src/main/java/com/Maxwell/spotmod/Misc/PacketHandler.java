@@ -3,6 +3,7 @@ package com.Maxwell.spotmod.Misc;
 import com.Maxwell.spotmod.Client.S2CDamageIndicatorPacket;
 import com.Maxwell.spotmod.Client.S2CSpotEntityPacket;
 import com.Maxwell.spotmod.Server.C2SSpotKeyPressedPacket;
+import com.Maxwell.spotmod.Server.S2CSyncConfigPacket;
 import com.Maxwell.spotmod.SpotMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
@@ -26,6 +27,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(id++, C2SSpotKeyPressedPacket.class, C2SSpotKeyPressedPacket::toBytes, C2SSpotKeyPressedPacket::new, C2SSpotKeyPressedPacket::handle);
         INSTANCE.registerMessage(id++, S2CSpotEntityPacket.class, S2CSpotEntityPacket::toBytes, S2CSpotEntityPacket::new, S2CSpotEntityPacket::handle);
         INSTANCE.registerMessage(id++, S2CDamageIndicatorPacket.class, S2CDamageIndicatorPacket::encode, S2CDamageIndicatorPacket::decode, S2CDamageIndicatorPacket::handle);
-      isRegistered = true;
+        INSTANCE.registerMessage(id++, S2CSyncConfigPacket.class, S2CSyncConfigPacket::toBytes, S2CSyncConfigPacket::new, S2CSyncConfigPacket::handle);
+        isRegistered = true;
     }
 }

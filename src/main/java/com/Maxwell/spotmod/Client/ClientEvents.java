@@ -1,6 +1,6 @@
 package com.Maxwell.spotmod.Client;
 
-import com.Maxwell.spotmod.Misc.Config.Config;
+import com.Maxwell.spotmod.Misc.Config.ModConfig;
 import com.Maxwell.spotmod.Misc.EXRenderType;
 import com.Maxwell.spotmod.Misc.Keybinds;
 import com.Maxwell.spotmod.Misc.PacketHandler;
@@ -34,6 +34,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Mod.EventBusSubscriber(modid = SpotMod.MODID, value = Dist.CLIENT)
 public class ClientEvents {
+    private static boolean serverAllowsIndicators = true;
+    private static int serverIndicatorDurationTicks = 20;
+    public static void updateServerConfig(boolean allows, int durationTicks) {
+        ClientEvents.serverAllowsIndicators = allows;
+        ClientEvents.serverIndicatorDurationTicks = durationTicks;
+    }
     @SubscribeEvent
     public static void onKeyRegister(RegisterKeyMappingsEvent event) {
         event.register(Keybinds.SPOT_KEY);
@@ -63,8 +69,6 @@ public class ClientEvents {
     }
     private static final List<DamageIndicator> activeIndicators = new CopyOnWriteArrayList<>();
     public static void addDamageIndicator(Vec3 attackerPos) {
-        if (!Config.Client.ENABLE_2D_DAMAGE_INDICATOR.get() && !Config.Client.ENABLE_3D_DAMAGE_INDICATOR.get()) return;
-        if (!Config.Server.ENABLE_ALL_INDICATORS.get()) return;
         if (Minecraft.getInstance().player == null) return;
         Player player = Minecraft.getInstance().player;
         float relativeAngle = calculateRelativeAngle(player, attackerPos);
@@ -78,7 +82,7 @@ public class ClientEvents {
     }
     @SubscribeEvent
     public static void onRenderLevel(RenderLevelStageEvent event) {
-        if (!Config.Client.ENABLE_3D_DAMAGE_INDICATOR.get() || event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES || activeIndicators.isEmpty()) return;
+        if (!serverAllowsIndicators || !ModConfig.Client.ENABLE_3D_DAMAGE_INDICATOR.get() || event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES || activeIndicators.isEmpty()) return;
         render3dDamageIndicators(event.getPoseStack());
 
     }
@@ -87,7 +91,7 @@ public class ClientEvents {
         if (!event.getOverlay().id().equals(VanillaGuiOverlay.CROSSHAIR.id())) {
             return;
         }
-        if (activeIndicators.isEmpty() || !Config.Client.ENABLE_2D_DAMAGE_INDICATOR.get()) {
+        if (!serverAllowsIndicators || activeIndicators.isEmpty() || !ModConfig.Client.ENABLE_2D_DAMAGE_INDICATOR.get()) {
             return;
         }
 
@@ -95,12 +99,12 @@ public class ClientEvents {
         if (player == null) return;
         PoseStack poseStack = event.getGuiGraphics().pose();
         long currentTime = System.currentTimeMillis();
-        int duration = Config.Server.DAMAGE_INDICATOR_DURATION_TICKS.get() * 50;
+        int duration = serverIndicatorDurationTicks * 50;
         int screenWidth = event.getWindow().getGuiScaledWidth();
         int screenHeight = event.getWindow().getGuiScaledHeight();
         float centerX = screenWidth / 2.0f;
         float centerY = screenHeight / 2.0f;
-        float radius = Config.Client.DAMAGE_2D_INDICATOR_DISTANCE.get().floatValue();
+        float radius = ModConfig.Client.DAMAGE_2D_INDICATOR_DISTANCE.get().floatValue();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableDepthTest();
@@ -121,7 +125,7 @@ public class ClientEvents {
             float alpha = 1.0F - ((float) age / duration);
             int a = (int) (Mth.clamp(alpha, 0, 1) * 200);
             int r = 255, g = 20, b = 20;
-            float size = Config.Client.DAMAGE_2D_INDICATOR_SIZE.get().floatValue();
+            float size = ModConfig.Client.DAMAGE_2D_INDICATOR_SIZE.get().floatValue();
             Vec3 p1_top = new Vec3(0, -size, 0);
             Vec3 p2_left = new Vec3(-size * 0.7f, size * 0.7f, 0);
             Vec3 p3_right = new Vec3(size * 0.7f, size * 0.7f, 0);
@@ -134,8 +138,8 @@ public class ClientEvents {
         RenderSystem.disableBlend();
     }
     private static Optional<LivingEntity> findBestTargetClientSide(Player player) {
-        double maxRange = Config.Server.SPOT_RANGE.get();
-        double fovAngle = Config.Server.SPOT_FOV_ANGLE.get();
+        double maxRange = ModConfig.Server.SPOT_RANGE.get();
+        double fovAngle = ModConfig.Server.SPOT_FOV_ANGLE.get();
         Vec3 playerEyePos = player.getEyePosition();
         AABB searchBox = player.getBoundingBox().inflate(maxRange);
         List<LivingEntity> nearbyEntities = player.level().getEntitiesOfClass(LivingEntity.class, searchBox, e ->
@@ -182,7 +186,7 @@ public class ClientEvents {
         MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
         Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         long currentTime = System.currentTimeMillis();
-        int duration = Config.Server.DAMAGE_INDICATOR_DURATION_TICKS.get() * 50;
+        int duration = serverIndicatorDurationTicks * 50;
 
         VertexConsumer vertexConsumer = buffer.getBuffer(EXRenderType.SPOT_MARKER_TRIANGLE);
 
@@ -192,13 +196,13 @@ public class ClientEvents {
             poseStack.pushPose();
             poseStack.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
             Vec3 offsetFromConfig = new Vec3(
-                    Config.Client.DAMAGE_3D_INDICATOR_OFFSET_X.get(),
-                    Config.Client.DAMAGE_3D_INDICATOR_OFFSET_Y.get(),
-                    Config.Client.DAMAGE_3D_INDICATOR_OFFSET_Z.get()
+                    ModConfig.Client.DAMAGE_3D_INDICATOR_OFFSET_X.get(),
+                    ModConfig.Client.DAMAGE_3D_INDICATOR_OFFSET_Y.get(),
+                    ModConfig.Client.DAMAGE_3D_INDICATOR_OFFSET_Z.get()
             );
             Vec3 indicatorOriginPos = player.position().add(offsetFromConfig);
             Vec3 direction = indicator.sourcePos.subtract(indicatorOriginPos);
-            float indicatorDistance = Config.Client.DAMAGE_3D_INDICATOR_DISTANCE.get().floatValue();
+            float indicatorDistance = ModConfig.Client.DAMAGE_3D_INDICATOR_DISTANCE.get().floatValue();
             Vec3 indicatorPos = indicatorOriginPos.add(direction.normalize().scale(indicatorDistance));
             poseStack.translate(indicatorPos.x, indicatorPos.y, indicatorPos.z);
             float yaw = (float) Mth.atan2(direction.x, direction.z);
@@ -210,11 +214,12 @@ public class ClientEvents {
             float alpha = 1.0F - ((float) age / duration);
             int r = 255, g = 20, b = 20;
             int a = (int) (alpha * 200);
-            float length = 0.5f;
-            float width = 0.2f;
-            Vec3 p1 = new Vec3(0, 0, length / 2); // 先端
-            Vec3 p2 = new Vec3(-width, 0, -length / 2); // 左下
-            Vec3 p3 = new Vec3(width, 0, -length / 2); // 右下
+            float size = ModConfig.Client.DAMAGE_3D_INDICATOR_SIZE.get().floatValue();
+            float length = size;
+            float width = size * 0.4f;
+            Vec3 p1 = new Vec3(0, 0, length / 2);
+            Vec3 p2 = new Vec3(-width, 0, -length / 2);
+            Vec3 p3 = new Vec3(width, 0, -length / 2);
             drawTriangle(vertexConsumer, matrix, p1, p2, p3, r, g, b, a);
             poseStack.popPose();
         });

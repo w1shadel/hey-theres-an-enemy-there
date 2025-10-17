@@ -2,7 +2,7 @@ package com.Maxwell.spotmod.Server;
 
 
 import com.Maxwell.spotmod.Client.S2CSpotEntityPacket;
-import com.Maxwell.spotmod.Misc.Config.Config;
+import com.Maxwell.spotmod.Misc.Config.ModConfig;
 import com.Maxwell.spotmod.Misc.PacketHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,15 +18,15 @@ public class ServerSpottedManager {
         if (entity == null || entity.isDeadOrDying()) {
             return;
         }
-        int durationTicks = Config.Server.SPOT_DURATION_SECONDS.get() * 20;
-        int cooldownTicks = Config.Server.SPOT_COOLDOWN_TICKS.get();
+        int durationTicks = ModConfig.Server.SPOT_DURATION_SECONDS.get() * 20;
+        int cooldownTicks = ModConfig.Server.SPOT_COOLDOWN_TICKS.get();
         SPOTTED_ENTITIES.put(entity.getUUID(), durationTicks);
         PLAYER_COOLDOWNS.put(spotter.getUUID(), cooldownTicks);
         S2CSpotEntityPacket spotPacket = new S2CSpotEntityPacket(entity.getUUID(), durationTicks);
         PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), spotPacket);
     }
     public static void tick() {
-        if (SPOTTED_ENTITIES.isEmpty() || !Config.Server.SPOT_ENABLE.get()) {
+        if (SPOTTED_ENTITIES.isEmpty() || !ModConfig.Server.SPOT_ENABLE.get()) {
             return;
         }
         SPOTTED_ENTITIES.keySet().forEach(uuid -> {
