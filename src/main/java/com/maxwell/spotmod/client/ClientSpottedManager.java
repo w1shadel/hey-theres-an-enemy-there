@@ -1,4 +1,4 @@
-package com.Maxwell.spotmod.Client;
+package com.maxwell.spotmod.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;

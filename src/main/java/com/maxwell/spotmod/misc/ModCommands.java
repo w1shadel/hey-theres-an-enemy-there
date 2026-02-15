@@ -1,7 +1,7 @@
-package com.Maxwell.spotmod.Misc;
+package com.maxwell.spotmod.misc;
 
-import com.Maxwell.spotmod.Misc.Config.ModConfig;
-import com.Maxwell.spotmod.Server.S2CSyncConfigPacket;
+import com.maxwell.spotmod.misc.config.ModConfig;
+import com.maxwell.spotmod.server.S2CSyncConfigPacket;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;

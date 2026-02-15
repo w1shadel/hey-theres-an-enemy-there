@@ -1,7 +1,7 @@
-package com.Maxwell.spotmod.Server;
+package com.maxwell.spotmod.server;
 
 
-import com.Maxwell.spotmod.Misc.Config.ModConfig;
+import com.maxwell.spotmod.misc.config.ModConfig;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;

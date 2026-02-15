@@ -1,9 +1,9 @@
-package com.Maxwell.spotmod.Server;
+package com.maxwell.spotmod.server;
 
 
-import com.Maxwell.spotmod.Client.S2CSpotEntityPacket;
-import com.Maxwell.spotmod.Misc.Config.ModConfig;
-import com.Maxwell.spotmod.Misc.PacketHandler;
+import com.maxwell.spotmod.client.S2CSpotEntityPacket;
+import com.maxwell.spotmod.misc.config.ModConfig;
+import com.maxwell.spotmod.misc.PacketHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -15,7 +15,7 @@ public class ServerSpottedManager {
     private static final ConcurrentHashMap<UUID, Integer> SPOTTED_ENTITIES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<UUID, Integer> PLAYER_COOLDOWNS = new ConcurrentHashMap<>();
     public static void spotEntity(LivingEntity entity, ServerPlayer spotter) {
-        if (entity == null || entity.isDeadOrDying()) {
+        if (entity == null || entity.isDeadOrDying() || isPlayerOnCooldown(spotter)) {
             return;
         }
         int durationTicks = ModConfig.Server.SPOT_DURATION_SECONDS.get() * 20;

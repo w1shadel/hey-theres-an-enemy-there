@@ -1,4 +1,4 @@
-package com.Maxwell.spotmod.Client;
+package com.maxwell.spotmod.client;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;

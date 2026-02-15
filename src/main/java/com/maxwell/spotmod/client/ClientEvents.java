@@ -1,10 +1,11 @@
-package com.Maxwell.spotmod.Client;
+package com.maxwell.spotmod.client;
 
-import com.Maxwell.spotmod.Misc.Config.ModConfig;
-import com.Maxwell.spotmod.Misc.EXRenderType;
-import com.Maxwell.spotmod.Misc.Keybinds;
-import com.Maxwell.spotmod.Misc.PacketHandler;
-import com.Maxwell.spotmod.SpotMod;
+import com.maxwell.spotmod.client.helper.AnimationPlayHelper;
+import com.maxwell.spotmod.misc.config.ModConfig;
+import com.maxwell.spotmod.misc.EXRenderType;
+import com.maxwell.spotmod.misc.Keybinds;
+import com.maxwell.spotmod.misc.PacketHandler;
+import com.maxwell.spotmod.SpotMod;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
@@ -23,7 +24,7 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.joml.Matrix4f;
-import com.Maxwell.spotmod.Server.C2SSpotKeyPressedPacket;
+import com.maxwell.spotmod.server.C2SSpotKeyPressedPacket;
 import net.minecraft.client.Minecraft;
 
 import java.util.Comparator;
@@ -47,6 +48,10 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
         if (Minecraft.getInstance().player != null && Keybinds.SPOT_KEY.consumeClick()) {
+            if (ModConfig.Client.ENABLE_SPOT_ANIMATION_HAND.get())
+            {
+                AnimationPlayHelper.playAnimation(Minecraft.getInstance().player, "spotting", false);
+            }
             PacketHandler.INSTANCE.sendToServer(new C2SSpotKeyPressedPacket());
             findBestTargetClientSide(Minecraft.getInstance().player).ifPresent(ClientSpottedManager::predictSpot);
         }

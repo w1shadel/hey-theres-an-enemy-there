@@ -1,10 +1,10 @@
-package com.Maxwell.spotmod.Misc;
+package com.maxwell.spotmod.misc;
 
-import com.Maxwell.spotmod.Client.S2CDamageIndicatorPacket;
-import com.Maxwell.spotmod.Client.S2CSpotEntityPacket;
-import com.Maxwell.spotmod.Server.C2SSpotKeyPressedPacket;
-import com.Maxwell.spotmod.Server.S2CSyncConfigPacket;
-import com.Maxwell.spotmod.SpotMod;
+import com.maxwell.spotmod.client.S2CDamageIndicatorPacket;
+import com.maxwell.spotmod.client.S2CSpotEntityPacket;
+import com.maxwell.spotmod.server.C2SSpotKeyPressedPacket;
+import com.maxwell.spotmod.server.S2CSyncConfigPacket;
+import com.maxwell.spotmod.SpotMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;

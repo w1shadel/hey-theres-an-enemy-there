@@ -1,4 +1,4 @@
-package com.Maxwell.spotmod.Misc;
+package com.maxwell.spotmod.misc;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;

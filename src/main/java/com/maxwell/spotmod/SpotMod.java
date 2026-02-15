@@ -1,7 +1,7 @@
-package com.Maxwell.spotmod;
+package com.maxwell.spotmod;
 
-import com.Maxwell.spotmod.Misc.Config.ModConfig;
-import com.Maxwell.spotmod.Server.ServerEvents;
+import com.maxwell.spotmod.misc.config.ModConfig;
+import com.maxwell.spotmod.server.ServerEvents;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;

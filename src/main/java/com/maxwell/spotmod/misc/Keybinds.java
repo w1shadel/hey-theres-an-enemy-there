@@ -1,6 +1,6 @@
-package com.Maxwell.spotmod.Misc;
+package com.maxwell.spotmod.misc;
 
-import com.Maxwell.spotmod.SpotMod;
+import com.maxwell.spotmod.SpotMod;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.api.distmarker.Dist;

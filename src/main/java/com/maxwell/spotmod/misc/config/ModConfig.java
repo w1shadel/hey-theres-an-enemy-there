@@ -1,10 +1,9 @@
-package com.Maxwell.spotmod.Misc.Config;
+package com.maxwell.spotmod.misc.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class Config {
+public class ModConfig {
 
-    // --- サーバーコンフィグ ---
     public static class Server {
         public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
         public static final ForgeConfigSpec SPEC;
@@ -49,7 +48,6 @@ public class Config {
         }
     }
 
-    // --- クライアントコンフィグ ---
     public static class Client {
         public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
         public static final ForgeConfigSpec SPEC;
@@ -59,9 +57,10 @@ public class Config {
         public static final ForgeConfigSpec.DoubleValue DAMAGE_3D_INDICATOR_OFFSET_X;
         public static final ForgeConfigSpec.DoubleValue DAMAGE_3D_INDICATOR_OFFSET_Y;
         public static final ForgeConfigSpec.DoubleValue DAMAGE_3D_INDICATOR_OFFSET_Z;
-
+        public static final ForgeConfigSpec.DoubleValue DAMAGE_3D_INDICATOR_SIZE;
         public static final ForgeConfigSpec.DoubleValue DAMAGE_2D_INDICATOR_DISTANCE;
         public static final ForgeConfigSpec.DoubleValue DAMAGE_2D_INDICATOR_SIZE;
+        public static final ForgeConfigSpec.BooleanValue ENABLE_SPOT_ANIMATION_HAND;
         static {
             BUILDER.push("Spot Mod - Client Settings");
 
@@ -86,6 +85,10 @@ public class Config {
             DAMAGE_3D_INDICATOR_OFFSET_Z = BUILDER
                     .comment("Offset of the 3D damage indicator's origin point on the Z-axis.")
                     .defineInRange("Damage_3D_Indicator_OffsetZ", 0.0, -10.0, 10.0);
+
+            DAMAGE_3D_INDICATOR_SIZE = BUILDER
+                    .comment("Determines the size (length) of the 3D damage indicator arrow.")
+                    .defineInRange("Damage_3D_Indicator_Size", 0.5, 0.1, 5.0);
             BUILDER.pop();
             BUILDER.push("2D Damage Indicator");
             ENABLE_2D_DAMAGE_INDICATOR = BUILDER
@@ -99,6 +102,9 @@ public class Config {
             DAMAGE_2D_INDICATOR_SIZE = BUILDER
                     .comment("Determines the size of the damage indicator.")
                     .defineInRange("Damage_2D_Indicator_Size", 8.0f, 0f, 60f);
+            ENABLE_SPOT_ANIMATION_HAND = BUILDER
+                    .comment("The arms will be animated when spotting. This is initially set to false as it can cause strange behavior when used while crouching.")
+                    .define("Enable_Spot_Animation_Hand",false);
             BUILDER.pop();
             SPEC = BUILDER.build();
         }

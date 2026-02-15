@@ -1,6 +1,6 @@
-package com.Maxwell.spotmod.Server;
+package com.maxwell.spotmod.server;
 
-import com.Maxwell.spotmod.Client.ClientEvents;
+import com.maxwell.spotmod.client.ClientEvents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
